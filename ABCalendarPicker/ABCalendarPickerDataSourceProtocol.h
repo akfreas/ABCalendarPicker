@@ -15,4 +15,7 @@
       numberOfEventsForDate:(NSDate *)date
                     onState:(ABCalendarPickerState)state;
 
+- (UIView *)calendarPicker:(ABCalendarPicker *)calendarPicker
+ controlOverlayViewForDate:(NSDate *)date
+                   onState:(ABCalendarPickerState)state;
 @end

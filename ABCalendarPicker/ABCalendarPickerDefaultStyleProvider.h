@@ -30,6 +30,7 @@
  postUpdateForCellView:(UIControl*)control
         onControlState:(UIControlState)controlState
             withEvents:(NSInteger)eventsCount
+           overlayView:(UIView *)overlayView 
               andState:(ABCalendarPickerState)state;
 
 @property (strong,nonatomic) UIImage * normalImage;

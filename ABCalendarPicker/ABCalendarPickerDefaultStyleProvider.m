@@ -363,6 +363,7 @@
     //button.layer.shouldRasterize = YES;
     //button.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     button.numberOfDots = 0;
+    button.overlayView = nil;
     [button setTitle:cellTitle forState:UIControlStateNormal];
     return button;
 }
@@ -371,6 +372,7 @@
  postUpdateForCellView:(UIControl*)control
         onControlState:(UIControlState)controlState
             withEvents:(NSInteger)eventsCount
+           overlayView:(UIView *)overlayView
               andState:(ABCalendarPickerState)state
 {
     if (state != ABCalendarPickerStateDays
@@ -379,6 +381,7 @@
     
     UIMyButton * button = (UIMyButton *)control;
     button.numberOfDots = MIN(self.maxNumberOfDots,eventsCount);
+    button.overlayView = overlayView;
 }
 
 - (id)init

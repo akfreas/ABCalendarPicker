@@ -29,6 +29,7 @@
  postUpdateForCellView:(UIControl*)control
         onControlState:(UIControlState)controlState
             withEvents:(NSInteger)eventsCount
+           overlayView:(UIView *)overlayView
               andState:(ABCalendarPickerState)state;
 
 @end

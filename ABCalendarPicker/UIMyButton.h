@@ -13,6 +13,7 @@
 @property (nonatomic) NSInteger numberOfDots;
 @property (strong,nonatomic) UIFont * tileTitleFont;
 @property (strong,nonatomic) UIFont * tileDotFont;
+@property (nonatomic) UIView *overlayView;
 
 - (NSString *)titleForState:(UIControlState)state;
 - (UIColor *)titleColorForState:(UIControlState)state;

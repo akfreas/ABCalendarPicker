@@ -93,6 +93,16 @@
     [self setNeedsDisplay];
 }
 
+- (void)setOverlayView:(UIView *)overlayView
+{
+    if ([_overlayView superview] != nil) {
+        [_overlayView removeFromSuperview];
+        _overlayView = nil;
+    }
+    _overlayView = overlayView;
+    [self addSubview:overlayView];
+}
+
 #pragma mark -
 #pragma mark Attributes section
 

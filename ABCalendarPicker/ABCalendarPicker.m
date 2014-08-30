@@ -823,8 +823,11 @@
             NSDate * buttonDate = [provider dateForRow:i andColumn:j];
             UIControlState controlState = [provider controlStateForDate:buttonDate];
             NSInteger eventsCount = [self.dataSource calendarPicker:self numberOfEventsForDate:buttonDate onState:self.currentState];
-            
-            [self.styleProvider calendarPicker:self postUpdateForCellView:control onControlState:controlState withEvents:eventsCount andState:self.currentState];
+            UIView *overlayView = nil;
+            if ([(id)self.dataSource respondsToSelector:@selector(calendarPicker:controlOverlayViewForDate:onState:)]) {
+                overlayView = [self.dataSource calendarPicker:self controlOverlayViewForDate:buttonDate onState:self.currentState];
+            }
+            [self.styleProvider calendarPicker:self postUpdateForCellView:control onControlState:controlState withEvents:eventsCount overlayView:overlayView andState:self.currentState];
         }
     }
     
