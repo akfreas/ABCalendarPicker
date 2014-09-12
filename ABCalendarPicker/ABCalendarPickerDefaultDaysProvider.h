@@ -26,8 +26,6 @@
 - (NSDate*)dateForPrevAnimation;
 - (NSDate*)dateForNextAnimation;
 // optional
-- (NSDate*)dateForLongPrevAnimation;
-- (NSDate*)dateForLongNextAnimation;
 
 - (NSInteger)rowsCount;
 - (NSInteger)columnsCount;

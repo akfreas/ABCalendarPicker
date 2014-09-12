@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		19FF79C219B2166800F7C29A /* ABCalendarPicker.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 258FACA716D9D3AD007EE6C6 /* ABCalendarPicker.bundle */; };
 		254756D916D33DE600CDD004 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254756D816D33DE600CDD004 /* UIKit.framework */; };
 		254756DB16D33DE600CDD004 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254756DA16D33DE600CDD004 /* Foundation.framework */; };
 		254756DD16D33DE600CDD004 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 254756DC16D33DE600CDD004 /* CoreGraphics.framework */; };
@@ -19,7 +20,6 @@
 		254756F216D33DE600CDD004 /* ABViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 254756F116D33DE600CDD004 /* ABViewController.m */; };
 		2547570216D3483600CDD004 /* CalendarShadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2547570116D3483600CDD004 /* CalendarShadow.png */; };
 		258FACA916D9D457007EE6C6 /* libABCalendarPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 258FACA316D9D3AD007EE6C6 /* libABCalendarPicker.a */; };
-		258FACAB16D9D4F3007EE6C6 /* ABCalendarPicker.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 258FACA716D9D3AD007EE6C6 /* ABCalendarPicker.bundle */; };
 		259687B018ED8F300089F0A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 259687AF18ED8F300089F0A4 /* Main.storyboard */; };
 		25CDE6FC16DE480400D105AD /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25CDE6FB16DE480400D105AD /* EventKit.framework */; };
 /* End PBXBuildFile section */
@@ -243,13 +243,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19FF79C219B2166800F7C29A /* ABCalendarPicker.bundle in Resources */,
 				254756E316D33DE600CDD004 /* InfoPlist.strings in Resources */,
 				254756EB16D33DE600CDD004 /* Default.png in Resources */,
 				254756ED16D33DE600CDD004 /* Default@2x.png in Resources */,
 				259687B018ED8F300089F0A4 /* Main.storyboard in Resources */,
 				254756EF16D33DE600CDD004 /* Default-568h@2x.png in Resources */,
 				2547570216D3483600CDD004 /* CalendarShadow.png in Resources */,
-				258FACAB16D9D4F3007EE6C6 /* ABCalendarPicker.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

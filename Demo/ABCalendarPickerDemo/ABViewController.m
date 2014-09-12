@@ -119,6 +119,13 @@
     return [[self eventsForDate:date] count];
 }
 
+- (UIView *)calendarPicker:(ABCalendarPicker *)calendarPicker controlOverlayViewForDate:(NSDate *)date onState:(ABCalendarPickerState)state
+{
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    v.backgroundColor = [UIColor colorWithRed:1.0 green:0 blue:0 alpha:0.5];
+    return v;
+}
+
 - (void)calendarPicker:(ABCalendarPicker *)calendarPicker
           dateSelected:(NSDate *)date
              withState:(ABCalendarPickerState)state

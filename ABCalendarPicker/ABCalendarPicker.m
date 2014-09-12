@@ -16,7 +16,7 @@
 #define LEFT_ARROW_STRING @"◀"
 #define RIGHT_ARROW_STRING @"▶"
 
-@interface ABCalendarPicker()
+@interface ABCalendarPicker() <UIGestureRecognizerDelegate>
 @property (strong,nonatomic) NSMutableArray * controls;
 @property (strong,nonatomic) NSMutableArray * columnLabels;
 @property (strong,nonatomic) UILabel * titleLabel;
@@ -59,51 +59,6 @@
 
 @implementation ABCalendarPicker
 
-@synthesize delegate = _delegate;
-@synthesize dataSource = _dataSource;
-@synthesize styleProvider = _styleProvider;
-@synthesize weekdaysProvider = _weekdaysProvider;
-@synthesize daysProvider = _daysProvider;
-@synthesize monthsProvider = _monthsProvider;
-@synthesize yearsProvider = _yearsProvider;
-@synthesize erasProvider = _erasProvider;
-
-@synthesize currentState = _currentState;
-@synthesize selectedDate = _selectedDate;
-@synthesize highlightedDate = _highlightedDate;
-@synthesize calendar = _calendar;
-@synthesize bottomExpanding = _bottomExpanding;
-@synthesize swipeNavigationEnabled = _swipeNavigationEnabled;
-
-@synthesize controls = _controls;
-@synthesize columnLabels = _columnLabels;
-@synthesize titleLabel = _titleLabel;
-@synthesize titleButton = _titleButton;
-@synthesize leftArrow = _leftArrow;
-@synthesize rightArrow = _rightArrow;
-@synthesize longLeftArrow = _longLeftArrow;
-@synthesize longRightArrow = _longRightArrow;
-@synthesize mainTileView = _mainTileView;
-@synthesize oldTileView = _oldTileView;
-@synthesize nowTileView = _nowTileView;
-@synthesize fromImageView = _fromImageView;
-@synthesize toImageView = _toImageView;
-@synthesize selectedControl = _selectedControl;
-@synthesize highlightedControl = _highlightedControl;
-@synthesize controlTouchBegin = _buttonTouchBegin;
-@synthesize previousState = _previousState;
-@synthesize buttonsPool = _buttonsPool;
-@synthesize dotLabels = _dotLabels;
-@synthesize dotLabelsToRemove = _dotLabelsToRemove;
-@synthesize deepPressingInProgress = _deepPressingInProgress;
-
-@synthesize patternImage = _patternImage;
-@synthesize normalImage = _normalImage;
-@synthesize highlightedImage = _highlightedImage;
-@synthesize selectedImage = _selectedImage;
-@synthesize selectedHighlightedImage = _selectedHighlightedImage;
-@synthesize gradientBar = _gradientBar;
-
 - (NSBundle *)frameworkBundle
 {
     static NSBundle * frameworkBundle = nil;
@@ -134,21 +89,30 @@
         [self updateStateAnimated:NO];
 }
 
-- (void)setHighlightedDate:(NSDate *)highlightedDate
+- (void)setHighlightedDate:(NSDate *)highlightedDate animation:(ABCalendarPickerAnimation)animation
 {
+    
     NSTimeInterval interval = highlightedDate.timeIntervalSince1970;
     interval -= fmod(interval, 60);
     highlightedDate = [NSDate dateWithTimeIntervalSince1970:interval];
     
-    if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:shoudSelectDate:withState:)])
+    if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:shouldSelectDate:withState:)])
     {
-        if (![(id)self.delegate calendarPicker:self
-                               shoudSelectDate:highlightedDate
-                                     withState:self.currentState])
+        if (![(id)self.delegate calendarPicker:self shouldSelectDate:highlightedDate withState:self.currentState])
         {
             return;
         }
     }
+    [self setHighlightedDate:highlightedDate];
+    NSInteger canDiffuse = [self.currentProvider canDiffuse];
+    UIControl * control = [[self.controls lastObject] lastObject];
+    if (canDiffuse < 2)
+        canDiffuse = canDiffuse && !control.enabled;
+    [self changeStateTo:self.currentState fromState:self.currentState animation:animation canDiffuse:canDiffuse];
+}
+
+- (void)setHighlightedDate:(NSDate *)highlightedDate
+{
     
     _highlightedDate = highlightedDate;
     
@@ -384,14 +348,7 @@
         [self updateStateAnimated:NO];
         return;
     }
-    
-    BOOL canDiffuse = [self.currentProvider canDiffuse];
-    UIControl * control = self.controls[0][0];
-    if (canDiffuse < 2)
-        canDiffuse = canDiffuse && !control.enabled;
-    ABCalendarPickerAnimation animation = [self.currentProvider animationForPrev];
-    self.highlightedDate = [self.currentProvider dateForPrevAnimation];
-    [self changeStateTo:self.currentState fromState:self.currentState animation:animation canDiffuse:canDiffuse];
+    [self setHighlightedDate:[self.currentProvider dateForPrevAnimation] animation:[self.currentProvider animationForPrev]];
 }
 
 - (void)rightButtonClicked:(id)sender
@@ -402,15 +359,7 @@
         [self updateStateAnimated:NO];
         return;
     }
-    
-    NSInteger canDiffuse = [self.currentProvider canDiffuse];
-    UIControl * control = [[self.controls lastObject] lastObject];
-    if (canDiffuse < 2)
-        canDiffuse = canDiffuse && !control.enabled;
-    ABCalendarPickerAnimation animation = [self.currentProvider animationForNext];
-    self.highlightedDate = [self.currentProvider dateForNextAnimation];
-    [self changeStateTo:self.currentState fromState:self.currentState animation:animation canDiffuse:canDiffuse];
-}
+    [self setHighlightedDate:[self.currentProvider dateForNextAnimation] animation:[self.currentProvider animationForNext]];}
 
 - (void)longLeftButtonClicked:(id)sender
 {
@@ -427,6 +376,8 @@
     self.highlightedDate = [self.currentProvider dateForLongPrevAnimation];
     [self changeStateTo:self.currentState fromState:self.currentState animation:animation canDiffuse:0];
 }
+
+
 
 - (void)longRightButtonClicked:(id)sender
 {
@@ -526,10 +477,12 @@
                     needScrollNext = YES;
                 }
                 
+                if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:shouldHighlightDate:withState:)] && [self.delegate calendarPicker:self shouldHighlightDate:date withState:self.currentState] == NO) {
+                    return;
+                }
+                
                 if (!needScrollPrev && !needScrollNext)
                 {
-                    if (!control.highlighted)
-                    {
                         // Lets highlight
                         self.highlightedDate = date;
                         self.highlightedControl.highlighted = NO;
@@ -538,17 +491,6 @@
                         
                         [self.oldTileView bringSubviewToFront:self.selectedControl];
                         [self.oldTileView bringSubviewToFront:control];
-                    }
-                    else
-                    {
-                        // Lets segue in
-                        NSInteger index = [self.providers indexOfObject:self.currentProvider];
-                        if (index > 0 && [self.providers objectAtIndex:index-1] != nil)
-                            [self setState:self.currentState-1 animated:YES];
-                        else if (self.currentState == ABCalendarPickerStateWeekdays)
-                            [self setState:self.currentState+1 animated:YES];
-                        self.controlTouchBegin = nil;
-                    }
                 }
                 else
                 {

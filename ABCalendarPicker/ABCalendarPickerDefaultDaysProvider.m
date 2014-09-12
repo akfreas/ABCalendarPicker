@@ -99,20 +99,6 @@
     return [self.calendar dateByAddingComponents:components toDate:[self.dateOwner highlightedDate] options:0]; 
 }
 
-- (NSDate*)dateForLongPrevAnimation
-{
-    NSDateComponents * components = [[NSDateComponents alloc] init];
-    components.year = -1;
-    return [self.calendar dateByAddingComponents:components toDate:[self.dateOwner highlightedDate] options:0];
-}
-
-- (NSDate*)dateForLongNextAnimation
-{
-    NSDateComponents * components = [[NSDateComponents alloc] init];
-    components.year = 1;
-    return [self.calendar dateByAddingComponents:components toDate:[self.dateOwner highlightedDate] options:0];
-}
-
 - (NSInteger)rowsCount
 {
     return [self.calendar rangeOfUnit:NSWeekCalendarUnit inUnit:NSMonthCalendarUnit forDate:[self.dateOwner highlightedDate]].length;
